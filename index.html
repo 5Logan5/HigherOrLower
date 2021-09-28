@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="faviconhlnew.png" type="images.jpg">
+    <title>Higher or Lower</title>
+
+    <style>
+        body {
+            background-image: url('autumn4k.jpg');
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+        }
+
+        .button {
+            border: none;
+            color: white;
+            padding: 16px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            transition-duration: 0.4s;
+            cursor: pointer;
+        }
+
+        .button1 {
+            background-color: #CD7F32;
+            color: black;
+            border: 2px solid #CD7F32;
+            position: relative;
+            width: 200px;
+            height: 500px;
+            right: -700px;
+
+        }
+
+        .button1:hover {
+            background-color: #DAA06D;
+        }
+
+        .button2 {
+            background-color: #DAA520;
+            color: black;
+            border: 2px solid #DAA520;
+            position: relative;
+            width: 200px;
+            height: 500px;
+            right: -790px;
+        }
+
+        .button2:hover {
+            background-color: #FFD580;
+        }
+
+        div.score {
+            position: relative;
+            bottom: -620px;
+            text-align: center;
+            font-size: 40px;
+        }
+
+        div.comments {
+            position: relative;
+            bottom: -630px;
+            text-align: center;
+            height: 1px;
+            font-size: 40px;
+        }
+
+        div.hiscore {
+            position: relative;
+            bottom: -690px;
+            text-align: center;
+            height: 1px;
+            font-size: 40px;
+        }
+    </style>
+
+</head>
+
+<div class="score">
+    Score: 0
+</div>
+
+<div class="comments">
+    Press Any Button To Start!
+</div>
+
+<div class="hiscore">
+    High Score: 0
+</div>
+
+
+<body>
+    <button id="button1" class="button button1" onClick="Higher()">Higher</button>
+    <button id="button2" class="button button2" onClick="Lower()">Lower</button>
+</body>
+
+<script>
+
+    var highScore = localStorage.getItem("HighScore")
+    console.log("Welcome. The only thing that you can cheat in this game is your high score in the local storage.")
+    if (highScore == null) {
+        localStorage.setItem("HighScore", 0)
+    }
+
+    if (highScore != 0) {
+        var currentHighScore = localStorage.getItem("HighScore")
+        document.getElementsByClassName('hiscore')[0].innerHTML = "High Score: " + currentHighScore + ""
+    }
+
+    function Higher() {
+        //document.getElementsByClassName('score')[0].innerHTML = "changed."
+        //document.cookie = "inGame=1"
+        var inGame = getCookie("inGame")
+        if (inGame != 1) {
+            document.cookie = "inGame = 1"
+            var justStarted = "1"
+            document.getElementsByClassName('score')[0].innerHTML = "Score: 0"
+        }
+
+        if (justStarted == "1") {
+            var currentScore = localStorage.getItem("Score")
+
+            if (currentScore == 0 || currentScore == null) {
+                var card = getCard()
+                localStorage.setItem("CurrentCard", card.GetDrawnCardForValue)
+                if (card.GetDrawnCardForValue == 8 || card.GetDrawnCardForValue == 1) {
+                    document.getElementsByClassName('comments')[0].innerHTML = "Your card is an " + card.GetDrawnCardFromDeck + ""
+                } else {
+                    document.getElementsByClassName('comments')[0].innerHTML = "Your card is a " + card.GetDrawnCardFromDeck + ""
+                }
+                localStorage.setItem("Score", "0")
+            }
+        }
+
+        if (inGame == "1") {
+            var newCard = getCard()
+            var oldCard = parseInt(localStorage.getItem("CurrentCard"))
+            var Score = parseInt(localStorage.getItem("Score"))
+            var newCardValue = parseInt(newCard.GetDrawnCardForValue)
+            if (newCardValue > oldCard) {
+                var Score = (Score + 1)
+                localStorage.setItem("Score", Score)
+                document.getElementsByClassName('score')[0].innerHTML = "Score: " + Score + ""
+                var DeckOfCards = ["ACE♥️", "2♥️", "3♥️", "4♥️", "5♥️", "6♥️", "7♥️", "8♥️", "9♥️", "10♥️", "JACK♥️", "QUEEN♥️", "KING♥️", "ACE♧", "2♧", "3♧", "4♧", "5♧", "6♧", "7♧", "8♧", "9♧", "10♧", "JACK♧", "QUEEN♧", "KING♧", "ACE♤", "2♤", "3♤", "4♤", "5♤", "6♤", "7♤", "8♤", "9♤", "10♤", "JACK♤", "QUEEN♤", "KING♤", "ACE♢", "2♢", "3♢", "4♢", "5♢", "6♢", "7♢", "8♢", "9♢", "10♢", "JACK♢", "QUEEN♢", "KING♢"]
+                var DrawCard = Math.floor(Math.random() * 52);
+                var GetDrawnCardForValue = DeckOfCards[DrawCard]
+                var GetDrawnCardFromDeck = DeckOfCards[DrawCard]
+
+                if (GetDrawnCardForValue == "ACE♥️" || GetDrawnCardForValue == "ACE♧" || GetDrawnCardForValue == "ACE♤" || GetDrawnCardForValue == "ACE♢") {
+                    var GetDrawnCardForValue = 1
+                }
+
+                if (GetDrawnCardForValue == "2♥️" || GetDrawnCardForValue == "2♧" || GetDrawnCardForValue == "2♤" || GetDrawnCardForValue == "2♢") {
+                    var GetDrawnCardForValue = 2
+                }
+
+                if (GetDrawnCardForValue == "3♥️" || GetDrawnCardForValue == "3♧" || GetDrawnCardForValue == "3♤" || GetDrawnCardForValue == "3♢") {
+                    var GetDrawnCardForValue = 3
+                }
+
+                if (GetDrawnCardForValue == "4♥️" || GetDrawnCardForValue == "4♧" || GetDrawnCardForValue == "4♤" || GetDrawnCardForValue == "4♢") {
+                    var GetDrawnCardForValue = 4
+                }
+
+                if (GetDrawnCardForValue == "5♥️" || GetDrawnCardForValue == "5♧" || GetDrawnCardForValue == "5♤" || GetDrawnCardForValue == "5♢") {
+                    var GetDrawnCardForValue = 5
+                }
+
+                if (GetDrawnCardForValue == "6♥️" || GetDrawnCardForValue == "6♧" || GetDrawnCardForValue == "6♤" || GetDrawnCardForValue == "6♢") {
+                    var GetDrawnCardForValue = 6
+                }
+
+                if (GetDrawnCardForValue == "7♥️" || GetDrawnCardForValue == "7♧" || GetDrawnCardForValue == "7♤" || GetDrawnCardForValue == "7♢") {
+                    var GetDrawnCardForValue = 7
+                }
+
+                if (GetDrawnCardForValue == "8♥️" || GetDrawnCardForValue == "8♧" || GetDrawnCardForValue == "8♤" || GetDrawnCardForValue == "8♢") {
+                    var GetDrawnCardForValue = 8
+                }
+
+                if (GetDrawnCardForValue == "9♥️" || GetDrawnCardForValue == "9♧" || GetDrawnCardForValue == "9♤" || GetDrawnCardForValue == "9♢") {
+                    var GetDrawnCardForValue = 9
+                }
+
+                if (GetDrawnCardForValue == "10♥️" || GetDrawnCardForValue == "10♧" || GetDrawnCardForValue == "10♤" || GetDrawnCardForValue == "10♢") {
+                    var GetDrawnCardForValue = 10
+                }
+
+                if (GetDrawnCardForValue == "JACK♥️" || GetDrawnCardForValue == "JACK♧" || GetDrawnCardForValue == "JACK♤" || GetDrawnCardForValue == "JACK♢") {
+                    var GetDrawnCardForValue = 11
+                }
+
+                if (GetDrawnCardForValue == "QUEEN♥️" || GetDrawnCardForValue == "QUEEN♧" || GetDrawnCardForValue == "QUEEN♤" || GetDrawnCardForValue == "QUEEN♢") {
+                    var GetDrawnCardForValue = 12
+                }
+
+                if (GetDrawnCardForValue == "KING♥️" || GetDrawnCardForValue == "KING♧" || GetDrawnCardForValue == "KING♤" || GetDrawnCardForValue == "KING♢") {
+                    var GetDrawnCardForValue = 13
+                }
+
+                localStorage.setItem("CurrentCard", GetDrawnCardForValue)
+                if (GetDrawnCardForValue == 8 || GetDrawnCardForValue == 1) {
+                    document.getElementsByClassName('comments')[0].innerHTML = "Your new card is an " + GetDrawnCardFromDeck + ""
+                } else {
+                    document.getElementsByClassName('comments')[0].innerHTML = "Your new card is a " + GetDrawnCardFromDeck + ""
+                }
+            }
+
+            if (newCardValue == oldCard) {
+                alert("It was a tie, try again!")
+                var DeckOfCards = ["ACE♥️", "2♥️", "3♥️", "4♥️", "5♥️", "6♥️", "7♥️", "8♥️", "9♥️", "10♥️", "JACK♥️", "QUEEN♥️", "KING♥️", "ACE♧", "2♧", "3♧", "4♧", "5♧", "6♧", "7♧", "8♧", "9♧", "10♧", "JACK♧", "QUEEN♧", "KING♧", "ACE♤", "2♤", "3♤", "4♤", "5♤", "6♤", "7♤", "8♤", "9♤", "10♤", "JACK♤", "QUEEN♤", "KING♤", "ACE♢", "2♢", "3♢", "4♢", "5♢", "6♢", "7♢", "8♢", "9♢", "10♢", "JACK♢", "QUEEN♢", "KING♢"]
+                var DrawCard = Math.floor(Math.random() * 52);
+                var GetDrawnCardForValue = DeckOfCards[DrawCard]
+                var GetDrawnCardFromDeck = DeckOfCards[DrawCard]
+
+                if (GetDrawnCardForValue == "ACE♥️" || GetDrawnCardForValue == "ACE♧" || GetDrawnCardForValue == "ACE♤" || GetDrawnCardForValue == "ACE♢") {
+                    var GetDrawnCardForValue = 1
+                }
+
+                if (GetDrawnCardForValue == "2♥️" || GetDrawnCardForValue == "2♧" || GetDrawnCardForValue == "2♤" || GetDrawnCardForValue == "2♢") {
+                    var GetDrawnCardForValue = 2
+                }
+
+                if (GetDrawnCardForValue == "3♥️" || GetDrawnCardForValue == "3♧" || GetDrawnCardForValue == "3♤" || GetDrawnCardForValue == "3♢") {
+                    var GetDrawnCardForValue = 3
+                }
+
+                if (GetDrawnCardForValue == "4♥️" || GetDrawnCardForValue == "4♧" || GetDrawnCardForValue == "4♤" || GetDrawnCardForValue == "4♢") {
+                    var GetDrawnCardForValue = 4
+                }
+
+                if (GetDrawnCardForValue == "5♥️" || GetDrawnCardForValue == "5♧" || GetDrawnCardForValue == "5♤" || GetDrawnCardForValue == "5♢") {
+                    var GetDrawnCardForValue = 5
+                }
+
+                if (GetDrawnCardForValue == "6♥️" || GetDrawnCardForValue == "6♧" || GetDrawnCardForValue == "6♤" || GetDrawnCardForValue == "6♢") {
+                    var GetDrawnCardForValue = 6
+                }
+
+                if (GetDrawnCardForValue == "7♥️" || GetDrawnCardForValue == "7♧" || GetDrawnCardForValue == "7♤" || GetDrawnCardForValue == "7♢") {
+                    var GetDrawnCardForValue = 7
+                }
+
+                if (GetDrawnCardForValue == "8♥️" || GetDrawnCardForValue == "8♧" || GetDrawnCardForValue == "8♤" || GetDrawnCardForValue == "8♢") {
+                    var GetDrawnCardForValue = 8
+                }
+
+                if (GetDrawnCardForValue == "9♥️" || GetDrawnCardForValue == "9♧" || GetDrawnCardForValue == "9♤" || GetDrawnCardForValue == "9♢") {
+                    var GetDrawnCardForValue = 9
+                }
+
+                if (GetDrawnCardForValue == "10♥️" || GetDrawnCardForValue == "10♧" || GetDrawnCardForValue == "10♤" || GetDrawnCardForValue == "10♢") {
+                    var GetDrawnCardForValue = 10
+                }
+
+                if (GetDrawnCardForValue == "JACK♥️" || GetDrawnCardForValue == "JACK♧" || GetDrawnCardForValue == "JACK♤" || GetDrawnCardForValue == "JACK♢") {
+                    var GetDrawnCardForValue = 11
+                }
+
+                if (GetDrawnCardForValue == "QUEEN♥️" || GetDrawnCardForValue == "QUEEN♧" || GetDrawnCardForValue == "QUEEN♤" || GetDrawnCardForValue == "QUEEN♢") {
+                    var GetDrawnCardForValue = 12
+                }
+
+                if (GetDrawnCardForValue == "KING♥️" || GetDrawnCardForValue == "KING♧" || GetDrawnCardForValue == "KING♤" || GetDrawnCardForValue == "KING♢") {
+                    var GetDrawnCardForValue = 13
+                }
+
+                localStorage.setItem("CurrentCard", GetDrawnCardForValue)
+                if (GetDrawnCardForValue == 8 || GetDrawnCardForValue == 1) {
+                    document.getElementsByClassName('comments')[0].innerHTML = "Your card is an " + GetDrawnCardFromDeck + ""
+                } else {
+                    document.getElementsByClassName('comments')[0].innerHTML = "Your card is a " + GetDrawnCardFromDeck + ""
+                }
+            }
+
+            if (newCardValue < oldCard) {
+                alert("You lost! " + newCardValue + " is not higher than " + oldCard + "!")
+                document.cookie = "inGame = 0"
+                var checkHighScore = localStorage.getItem("HighScore")
+                var checkCurrentScore = parseInt(localStorage.getItem("Score"))
+                localStorage.removeItem("CurrentCard")
+                localStorage.setItem("Score", "0")
+                document.getElementsByClassName('comments')[0].innerHTML = "Press any button to try again!"
+
+                if (checkCurrentScore > checkHighScore) {
+                    localStorage.setItem("HighScore", checkCurrentScore)
+                    document.getElementsByClassName('hiscore')[0].innerHTML = "High Score: " + checkCurrentScore + ""
+                    document.getElementsByClassName('comments')[0].innerHTML = "New High Score!"
+                    alert("Nice, you got a new high score of " + checkCurrentScore + "!")
+                }
+            }
+
+        }
+    }
+
+    function Lower() {
+        //document.getElementsByClassName('score')[0].innerHTML = "changed."
+        //document.cookie = "inGame=1"
+        var inGame = getCookie("inGame")
+        if (inGame != 1) {
+            document.cookie = "inGame = 1"
+            var justStarted = "1"
+            document.getElementsByClassName('score')[0].innerHTML = "Score: 0"
+        }
+
+        if (justStarted == "1") {
+            var currentScore = localStorage.getItem("Score")
+
+            if (currentScore == 0 || currentScore == null) {
+                var card = getCard()
+                localStorage.setItem("CurrentCard", card.GetDrawnCardForValue)
+                if (card.GetDrawnCardForValue == 8 || card.GetDrawnCardForValue == 1) {
+                    document.getElementsByClassName('comments')[0].innerHTML = "Your card is an " + card.GetDrawnCardFromDeck + ""
+                } else {
+                    document.getElementsByClassName('comments')[0].innerHTML = "Your card is a " + card.GetDrawnCardFromDeck + ""
+                }
+                localStorage.setItem("Score", "0")
+            }
+        }
+
+        if (inGame == "1") {
+            var newCard = getCard()
+            var oldCard = parseInt(localStorage.getItem("CurrentCard"))
+            var Score = parseInt(localStorage.getItem("Score"))
+            var newCardValue = parseInt(newCard.GetDrawnCardForValue)
+            if (newCardValue < oldCard) {
+                var Score = (Score + 1)
+                localStorage.setItem("Score", Score)
+                document.getElementsByClassName('score')[0].innerHTML = "Score: " + Score + ""
+                var DeckOfCards = ["ACE♥️", "2♥️", "3♥️", "4♥️", "5♥️", "6♥️", "7♥️", "8♥️", "9♥️", "10♥️", "JACK♥️", "QUEEN♥️", "KING♥️", "ACE♧", "2♧", "3♧", "4♧", "5♧", "6♧", "7♧", "8♧", "9♧", "10♧", "JACK♧", "QUEEN♧", "KING♧", "ACE♤", "2♤", "3♤", "4♤", "5♤", "6♤", "7♤", "8♤", "9♤", "10♤", "JACK♤", "QUEEN♤", "KING♤", "ACE♢", "2♢", "3♢", "4♢", "5♢", "6♢", "7♢", "8♢", "9♢", "10♢", "JACK♢", "QUEEN♢", "KING♢"]
+                var DrawCard = Math.floor(Math.random() * 52);
+                var GetDrawnCardForValue = DeckOfCards[DrawCard]
+                var GetDrawnCardFromDeck = DeckOfCards[DrawCard]
+
+                if (GetDrawnCardForValue == "ACE♥️" || GetDrawnCardForValue == "ACE♧" || GetDrawnCardForValue == "ACE♤" || GetDrawnCardForValue == "ACE♢") {
+                    var GetDrawnCardForValue = 1
+                }
+
+                if (GetDrawnCardForValue == "2♥️" || GetDrawnCardForValue == "2♧" || GetDrawnCardForValue == "2♤" || GetDrawnCardForValue == "2♢") {
+                    var GetDrawnCardForValue = 2
+                }
+
+                if (GetDrawnCardForValue == "3♥️" || GetDrawnCardForValue == "3♧" || GetDrawnCardForValue == "3♤" || GetDrawnCardForValue == "3♢") {
+                    var GetDrawnCardForValue = 3
+                }
+
+                if (GetDrawnCardForValue == "4♥️" || GetDrawnCardForValue == "4♧" || GetDrawnCardForValue == "4♤" || GetDrawnCardForValue == "4♢") {
+                    var GetDrawnCardForValue = 4
+                }
+
+                if (GetDrawnCardForValue == "5♥️" || GetDrawnCardForValue == "5♧" || GetDrawnCardForValue == "5♤" || GetDrawnCardForValue == "5♢") {
+                    var GetDrawnCardForValue = 5
+                }
+
+                if (GetDrawnCardForValue == "6♥️" || GetDrawnCardForValue == "6♧" || GetDrawnCardForValue == "6♤" || GetDrawnCardForValue == "6♢") {
+                    var GetDrawnCardForValue = 6
+                }
+
+                if (GetDrawnCardForValue == "7♥️" || GetDrawnCardForValue == "7♧" || GetDrawnCardForValue == "7♤" || GetDrawnCardForValue == "7♢") {
+                    var GetDrawnCardForValue = 7
+                }
+
+                if (GetDrawnCardForValue == "8♥️" || GetDrawnCardForValue == "8♧" || GetDrawnCardForValue == "8♤" || GetDrawnCardForValue == "8♢") {
+                    var GetDrawnCardForValue = 8
+                }
+
+                if (GetDrawnCardForValue == "9♥️" || GetDrawnCardForValue == "9♧" || GetDrawnCardForValue == "9♤" || GetDrawnCardForValue == "9♢") {
+                    var GetDrawnCardForValue = 9
+                }
+
+                if (GetDrawnCardForValue == "10♥️" || GetDrawnCardForValue == "10♧" || GetDrawnCardForValue == "10♤" || GetDrawnCardForValue == "10♢") {
+                    var GetDrawnCardForValue = 10
+                }
+
+                if (GetDrawnCardForValue == "JACK♥️" || GetDrawnCardForValue == "JACK♧" || GetDrawnCardForValue == "JACK♤" || GetDrawnCardForValue == "JACK♢") {
+                    var GetDrawnCardForValue = 11
+                }
+
+                if (GetDrawnCardForValue == "QUEEN♥️" || GetDrawnCardForValue == "QUEEN♧" || GetDrawnCardForValue == "QUEEN♤" || GetDrawnCardForValue == "QUEEN♢") {
+                    var GetDrawnCardForValue = 12
+                }
+
+                if (GetDrawnCardForValue == "KING♥️" || GetDrawnCardForValue == "KING♧" || GetDrawnCardForValue == "KING♤" || GetDrawnCardForValue == "KING♢") {
+                    var GetDrawnCardForValue = 13
+                }
+
+                localStorage.setItem("CurrentCard", GetDrawnCardForValue)
+                if (GetDrawnCardForValue == 8 || GetDrawnCardForValue == 1) {
+                    document.getElementsByClassName('comments')[0].innerHTML = "Your new card is an " + GetDrawnCardFromDeck + ""
+                } else {
+                    document.getElementsByClassName('comments')[0].innerHTML = "Your new card is a " + GetDrawnCardFromDeck + ""
+                }
+            }
+
+            if (newCardValue == oldCard) {
+                alert("It was a tie, try again!")
+                var DeckOfCards = ["ACE♥️", "2♥️", "3♥️", "4♥️", "5♥️", "6♥️", "7♥️", "8♥️", "9♥️", "10♥️", "JACK♥️", "QUEEN♥️", "KING♥️", "ACE♧", "2♧", "3♧", "4♧", "5♧", "6♧", "7♧", "8♧", "9♧", "10♧", "JACK♧", "QUEEN♧", "KING♧", "ACE♤", "2♤", "3♤", "4♤", "5♤", "6♤", "7♤", "8♤", "9♤", "10♤", "JACK♤", "QUEEN♤", "KING♤", "ACE♢", "2♢", "3♢", "4♢", "5♢", "6♢", "7♢", "8♢", "9♢", "10♢", "JACK♢", "QUEEN♢", "KING♢"]
+                var DrawCard = Math.floor(Math.random() * 52);
+                var GetDrawnCardForValue = DeckOfCards[DrawCard]
+                var GetDrawnCardFromDeck = DeckOfCards[DrawCard]
+
+                if (GetDrawnCardForValue == "ACE♥️" || GetDrawnCardForValue == "ACE♧" || GetDrawnCardForValue == "ACE♤" || GetDrawnCardForValue == "ACE♢") {
+                    var GetDrawnCardForValue = 1
+                }
+
+                if (GetDrawnCardForValue == "2♥️" || GetDrawnCardForValue == "2♧" || GetDrawnCardForValue == "2♤" || GetDrawnCardForValue == "2♢") {
+                    var GetDrawnCardForValue = 2
+                }
+
+                if (GetDrawnCardForValue == "3♥️" || GetDrawnCardForValue == "3♧" || GetDrawnCardForValue == "3♤" || GetDrawnCardForValue == "3♢") {
+                    var GetDrawnCardForValue = 3
+                }
+
+                if (GetDrawnCardForValue == "4♥️" || GetDrawnCardForValue == "4♧" || GetDrawnCardForValue == "4♤" || GetDrawnCardForValue == "4♢") {
+                    var GetDrawnCardForValue = 4
+                }
+
+                if (GetDrawnCardForValue == "5♥️" || GetDrawnCardForValue == "5♧" || GetDrawnCardForValue == "5♤" || GetDrawnCardForValue == "5♢") {
+                    var GetDrawnCardForValue = 5
+                }
+
+                if (GetDrawnCardForValue == "6♥️" || GetDrawnCardForValue == "6♧" || GetDrawnCardForValue == "6♤" || GetDrawnCardForValue == "6♢") {
+                    var GetDrawnCardForValue = 6
+                }
+
+                if (GetDrawnCardForValue == "7♥️" || GetDrawnCardForValue == "7♧" || GetDrawnCardForValue == "7♤" || GetDrawnCardForValue == "7♢") {
+                    var GetDrawnCardForValue = 7
+                }
+
+                if (GetDrawnCardForValue == "8♥️" || GetDrawnCardForValue == "8♧" || GetDrawnCardForValue == "8♤" || GetDrawnCardForValue == "8♢") {
+                    var GetDrawnCardForValue = 8
+                }
+
+                if (GetDrawnCardForValue == "9♥️" || GetDrawnCardForValue == "9♧" || GetDrawnCardForValue == "9♤" || GetDrawnCardForValue == "9♢") {
+                    var GetDrawnCardForValue = 9
+                }
+
+                if (GetDrawnCardForValue == "10♥️" || GetDrawnCardForValue == "10♧" || GetDrawnCardForValue == "10♤" || GetDrawnCardForValue == "10♢") {
+                    var GetDrawnCardForValue = 10
+                }
+
+                if (GetDrawnCardForValue == "JACK♥️" || GetDrawnCardForValue == "JACK♧" || GetDrawnCardForValue == "JACK♤" || GetDrawnCardForValue == "JACK♢") {
+                    var GetDrawnCardForValue = 11
+                }
+
+                if (GetDrawnCardForValue == "QUEEN♥️" || GetDrawnCardForValue == "QUEEN♧" || GetDrawnCardForValue == "QUEEN♤" || GetDrawnCardForValue == "QUEEN♢") {
+                    var GetDrawnCardForValue = 12
+                }
+
+                if (GetDrawnCardForValue == "KING♥️" || GetDrawnCardForValue == "KING♧" || GetDrawnCardForValue == "KING♤" || GetDrawnCardForValue == "KING♢") {
+                    var GetDrawnCardForValue = 13
+                }
+
+                localStorage.setItem("CurrentCard", GetDrawnCardForValue)
+                if (GetDrawnCardForValue == 8 || GetDrawnCardForValue == 1) {
+                    document.getElementsByClassName('comments')[0].innerHTML = "Your card is an " + GetDrawnCardFromDeck + ""
+                } else {
+                    document.getElementsByClassName('comments')[0].innerHTML = "Your card is a " + GetDrawnCardFromDeck + ""
+                }
+            }
+
+            if (newCardValue > oldCard) {
+                alert("You lost! " + newCardValue + " is not lower than " + oldCard + "!")
+                document.cookie = "inGame = 0"
+                var checkHighScore = localStorage.getItem("HighScore")
+                var checkCurrentScore = parseInt(localStorage.getItem("Score"))
+                localStorage.removeItem("CurrentCard")
+                localStorage.setItem("Score", "0")
+                document.getElementsByClassName('comments')[0].innerHTML = "Press any button to try again!"
+
+                if (checkCurrentScore > checkHighScore) {
+                    localStorage.setItem("HighScore", checkCurrentScore)
+                    document.getElementsByClassName('hiscore')[0].innerHTML = "High Score: " + checkCurrentScore + ""
+                    document.getElementsByClassName('comments')[0].innerHTML = "New High Score!"
+                    alert("Nice, you got a new high score of " + checkCurrentScore + "!")
+                }
+            }
+
+        }
+    }
+
+    function getCard() {
+        var DeckOfCards = ["ACE♥️", "2♥️", "3♥️", "4♥️", "5♥️", "6♥️", "7♥️", "8♥️", "9♥️", "10♥️", "JACK♥️", "QUEEN♥️", "KING♥️", "ACE♧", "2♧", "3♧", "4♧", "5♧", "6♧", "7♧", "8♧", "9♧", "10♧", "JACK♧", "QUEEN♧", "KING♧", "ACE♤", "2♤", "3♤", "4♤", "5♤", "6♤", "7♤", "8♤", "9♤", "10♤", "JACK♤", "QUEEN♤", "KING♤", "ACE♢", "2♢", "3♢", "4♢", "5♢", "6♢", "7♢", "8♢", "9♢", "10♢", "JACK♢", "QUEEN♢", "KING♢"]
+        var DrawCard = Math.floor(Math.random() * 52);
+        var GetDrawnCardForValue = DeckOfCards[DrawCard]
+        var GetDrawnCardFromDeck = DeckOfCards[DrawCard]
+
+        if (GetDrawnCardForValue == "ACE♥️" || GetDrawnCardForValue == "ACE♧" || GetDrawnCardForValue == "ACE♤" || GetDrawnCardForValue == "ACE♢") {
+            var GetDrawnCardForValue = 1
+        }
+
+        if (GetDrawnCardForValue == "2♥️" || GetDrawnCardForValue == "2♧" || GetDrawnCardForValue == "2♤" || GetDrawnCardForValue == "2♢") {
+            var GetDrawnCardForValue = 2
+        }
+
+        if (GetDrawnCardForValue == "3♥️" || GetDrawnCardForValue == "3♧" || GetDrawnCardForValue == "3♤" || GetDrawnCardForValue == "3♢") {
+            var GetDrawnCardForValue = 3
+        }
+
+        if (GetDrawnCardForValue == "4♥️" || GetDrawnCardForValue == "4♧" || GetDrawnCardForValue == "4♤" || GetDrawnCardForValue == "4♢") {
+            var GetDrawnCardForValue = 4
+        }
+
+        if (GetDrawnCardForValue == "5♥️" || GetDrawnCardForValue == "5♧" || GetDrawnCardForValue == "5♤" || GetDrawnCardForValue == "5♢") {
+            var GetDrawnCardForValue = 5
+        }
+
+        if (GetDrawnCardForValue == "6♥️" || GetDrawnCardForValue == "6♧" || GetDrawnCardForValue == "6♤" || GetDrawnCardForValue == "6♢") {
+            var GetDrawnCardForValue = 6
+        }
+
+        if (GetDrawnCardForValue == "7♥️" || GetDrawnCardForValue == "7♧" || GetDrawnCardForValue == "7♤" || GetDrawnCardForValue == "7♢") {
+            var GetDrawnCardForValue = 7
+        }
+
+        if (GetDrawnCardForValue == "8♥️" || GetDrawnCardForValue == "8♧" || GetDrawnCardForValue == "8♤" || GetDrawnCardForValue == "8♢") {
+            var GetDrawnCardForValue = 8
+        }
+
+        if (GetDrawnCardForValue == "9♥️" || GetDrawnCardForValue == "9♧" || GetDrawnCardForValue == "9♤" || GetDrawnCardForValue == "9♢") {
+            var GetDrawnCardForValue = 9
+        }
+
+        if (GetDrawnCardForValue == "10♥️" || GetDrawnCardForValue == "10♧" || GetDrawnCardForValue == "10♤" || GetDrawnCardForValue == "10♢") {
+            var GetDrawnCardForValue = 10
+        }
+
+        if (GetDrawnCardForValue == "JACK♥️" || GetDrawnCardForValue == "JACK♧" || GetDrawnCardForValue == "JACK♤" || GetDrawnCardForValue == "JACK♢") {
+            var GetDrawnCardForValue = 11
+        }
+
+        if (GetDrawnCardForValue == "QUEEN♥️" || GetDrawnCardForValue == "QUEEN♧" || GetDrawnCardForValue == "QUEEN♤" || GetDrawnCardForValue == "QUEEN♢") {
+            var GetDrawnCardForValue = 12
+        }
+
+        if (GetDrawnCardForValue == "KING♥️" || GetDrawnCardForValue == "KING♧" || GetDrawnCardForValue == "KING♤" || GetDrawnCardForValue == "KING♢") {
+            var GetDrawnCardForValue = 13
+        }
+        return {
+            GetDrawnCardForValue,
+            GetDrawnCardFromDeck
+        }
+    }
+
+    window.onbeforeunload = function () {
+        document.cookie = "inGame = 0"
+        var checkHighScore = localStorage.getItem("HighScore")
+        var checkCurrentScore = parseInt(localStorage.getItem("Score"))
+        localStorage.removeItem("CurrentCard")
+        localStorage.setItem("Score", "0")
+        document.getElementsByClassName('comments')[0].innerHTML = "Press any button to try again!"
+
+        if (checkCurrentScore > checkHighScore) {
+            localStorage.setItem("HighScore", checkCurrentScore)
+            document.getElementsByClassName('hiscore')[0].innerHTML = "High Score: " + checkCurrentScore + ""
+            document.getElementsByClassName('comments')[0].innerHTML = "New High Score!"
+        }
+    }
+
+    function getCookie(cname) {
+        let name = cname + "=";
+        let decodedCookie = decodeURIComponent(document.cookie);
+        let ca = decodedCookie.split(';');
+        for (let i = 0; i < ca.length; i++) {
+            let c = ca[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return "";
+    }
+
+</script>
+
+</html>
