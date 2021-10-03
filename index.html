@@ -80,6 +80,22 @@
             height: 1px;
             font-size: 40px;
         }
+
+        div.chances {
+            position: relative;
+            bottom: -740px;
+            text-align: center;
+            height: 1px;
+            font-size: 40px;
+        }
+
+        div.chanceOverNine {
+            position: relative;
+            bottom: -790px;
+            text-align: center;
+            height: 1px;
+            font-size: 40px;
+        }
     </style>
 
 </head>
@@ -96,6 +112,14 @@
     High Score: 0
 </div>
 
+<div class="chances">
+
+</div>
+
+<div class="chanceOverNine">
+
+</div>
+
 
 <body>
     <button id="button1" class="button button1" onClick="Higher()">Higher</button>
@@ -103,6 +127,23 @@
 </body>
 
 <script>
+
+    var totalGames = localStorage.getItem("totalPlays")
+
+    if (totalGames == undefined) {
+        localStorage.setItem("totalPlays", "0")
+        totalGames = 0
+    }
+
+    if (totalGames > 0) {
+        var gamesOverNine = parseInt(localStorage.getItem("gamesOverNine"))
+
+        var chancesOverNine = (gamesOverNine / totalGames) * 100
+
+        var chancesOverNine = Math.round(chancesOverNine)
+
+        document.getElementsByClassName('chanceOverNine')[0].innerHTML = "You have a " + chancesOverNine + "% chance of getting over 9!"
+    }
 
     var highScore = localStorage.getItem("HighScore")
     console.log("Welcome. The only thing that you can cheat in this game is your high score in the local storage.")
@@ -138,6 +179,7 @@
                     document.getElementsByClassName('comments')[0].innerHTML = "Your card is a " + card.GetDrawnCardFromDeck + ""
                 }
                 localStorage.setItem("Score", "0")
+                checkChances()
             }
         }
 
@@ -216,6 +258,7 @@
                 } else {
                     document.getElementsByClassName('comments')[0].innerHTML = "Your new card is a " + GetDrawnCardFromDeck + ""
                 }
+                checkChances()
             }
 
             if (newCardValue == oldCard) {
@@ -284,6 +327,7 @@
                 } else {
                     document.getElementsByClassName('comments')[0].innerHTML = "Your card is a " + GetDrawnCardFromDeck + ""
                 }
+                checkChances()
             }
 
             if (newCardValue < oldCard) {
@@ -293,17 +337,116 @@
                 var checkCurrentScore = parseInt(localStorage.getItem("Score"))
                 localStorage.removeItem("CurrentCard")
                 localStorage.removeItem("CurrentCardSuit")
-                localStorage.setItem("Score", "0")
                 document.getElementsByClassName('comments')[0].innerHTML = "Press any button to try again!"
-
+                addGameToAcc()
                 if (checkCurrentScore > checkHighScore) {
                     localStorage.setItem("HighScore", checkCurrentScore)
                     document.getElementsByClassName('hiscore')[0].innerHTML = "High Score: " + checkCurrentScore + ""
                     document.getElementsByClassName('comments')[0].innerHTML = "New High Score!"
                     alert("Nice, you got a new high score of " + checkCurrentScore + "!")
                 }
+
             }
 
+        }
+    }
+
+    function addGameToAcc() {
+        var totalGames = localStorage.getItem("totalPlays")
+        var gamesOverNine = localStorage.getItem("gamesOverNine")
+        var Score = parseInt(localStorage.getItem("Score"))
+
+        if (totalGames == undefined) {
+            totalGames = 0
+            localStorage.setItem("totalPlays", "0")
+        } else {
+            var totalGames = parseInt(localStorage.getItem("totalPlays"))
+        }
+
+        if (gamesOverNine == undefined) {
+            gamesOverNine = 0
+            localStorage.setItem("gamesOverNine", "0")
+        } else {
+            var gamesOverNine = parseInt(localStorage.getItem("gamesOverNine"))
+        }
+
+        if (totalGames >= 0) {
+            totalGames += 1
+            localStorage.setItem("totalPlays", totalGames)
+
+            if (Score >= 10) {
+                gamesOverNine += 1
+                localStorage.setItem("gamesOverNine", gamesOverNine)
+                localStorage.setItem('Score', "0")
+            }
+            localStorage.setItem('Score', "0")
+        }
+
+        var totalGames = parseInt(localStorage.getItem("totalPlays"))
+        if (totalGames > 0) {
+            var gamesOverNine = parseInt(localStorage.getItem("gamesOverNine"))
+
+            var chancesOverNine = (gamesOverNine / totalGames) * 100
+            var chancesOverNine = Math.round(chancesOverNine)
+
+            document.getElementsByClassName('chanceOverNine')[0].innerHTML = "You have a " + chancesOverNine + "% chance of getting over 9!"
+        }
+
+    }
+
+    function checkChances() {
+        var currentCardNow = parseInt(localStorage.getItem("CurrentCard"))
+
+        if (currentCardNow == 1) {
+            document.getElementsByClassName('chances')[0].innerHTML = "If you click 'Higher', you have a 92% chance of winning!"
+        }
+
+        if (currentCardNow == 2) {
+            document.getElementsByClassName('chances')[0].innerHTML = "If you click 'Higher', you have a 85% chance of winning!"
+        }
+
+        if (currentCardNow == 3) {
+            document.getElementsByClassName('chances')[0].innerHTML = "If you click 'Higher', you have a 77% chance of winning!"
+        }
+
+        if (currentCardNow == 4) {
+            document.getElementsByClassName('chances')[0].innerHTML = "If you click 'Higher', you have a 69% chance of winning!"
+        }
+
+        if (currentCardNow == 5) {
+            document.getElementsByClassName('chances')[0].innerHTML = "If you click 'Higher', you have a 62% chance of winning!"
+        }
+
+        if (currentCardNow == 6) {
+            document.getElementsByClassName('chances')[0].innerHTML = "If you click 'Higher', you have a 54% chance of winning!"
+        }
+
+        if (currentCardNow == 7) {
+            document.getElementsByClassName('chances')[0].innerHTML = "If you click 'Lower', you have a 52% chance of winning!"
+        }
+
+        if (currentCardNow == 8) {
+            document.getElementsByClassName('chances')[0].innerHTML = "If you click 'Lower', you have a 62% chance of winning!"
+        }
+
+        if (currentCardNow == 9) {
+            document.getElementsByClassName('chances')[0].innerHTML = "If you click 'Lower', you have a 69% chance of winning!"
+        }
+
+        if (currentCardNow == 10) {
+            document.getElementsByClassName('chances')[0].innerHTML = "If you click 'Lower', you have a 92% chance of winning!"
+        }
+
+        if (currentCardNow == 11) {
+            document.getElementsByClassName('chances')[0].innerHTML = "If you click 'Lower', you have a 77% chance of winning!"
+        }
+
+        if (currentCardNow == 12) {
+            document.getElementsByClassName('chances')[0].innerHTML = "If you click 'Lower', you have a 85% chance of winning!"
+        }
+
+        if (currentCardNow == 13) {
+            document.getElementsByClassName('chances')[0].innerHTML = "If you click 'Lower', you have a 92% chance of winning!"
         }
     }
 
@@ -376,7 +519,6 @@
         var checkCurrentScore = parseInt(localStorage.getItem("Score"))
         localStorage.removeItem("CurrentCard")
         localStorage.removeItem("CurrentCardSuit")
-        localStorage.setItem("Score", "0")
         document.getElementsByClassName('comments')[0].innerHTML = "Press any button to try again!"
 
         if (checkCurrentScore > checkHighScore) {
@@ -384,6 +526,8 @@
             document.getElementsByClassName('hiscore')[0].innerHTML = "High Score: " + checkCurrentScore + ""
             document.getElementsByClassName('comments')[0].innerHTML = "New High Score!"
         }
+
+        addGameToAcc()
     }
 
     function Lower() {
@@ -409,6 +553,7 @@
                     document.getElementsByClassName('comments')[0].innerHTML = "Your card is a " + card.GetDrawnCardFromDeck + ""
                 }
                 localStorage.setItem("Score", "0")
+                checkChances()
             }
         }
 
@@ -487,6 +632,7 @@
                 } else {
                     document.getElementsByClassName('comments')[0].innerHTML = "Your new card is a " + GetDrawnCardFromDeck + ""
                 }
+                checkChances()
             }
 
             if (newCardValue == oldCard) {
@@ -555,6 +701,7 @@
                 } else {
                     document.getElementsByClassName('comments')[0].innerHTML = "Your card is a " + GetDrawnCardFromDeck + ""
                 }
+                checkChances()
             }
 
             if (newCardValue > oldCard) {
@@ -564,9 +711,8 @@
                 var checkCurrentScore = parseInt(localStorage.getItem("Score"))
                 localStorage.removeItem("CurrentCard")
                 localStorage.removeItem("CurrentCardSuit")
-                localStorage.setItem("Score", "0")
                 document.getElementsByClassName('comments')[0].innerHTML = "Press any button to try again!"
-
+                addGameToAcc()
                 if (checkCurrentScore > checkHighScore) {
                     localStorage.setItem("HighScore", checkCurrentScore)
                     document.getElementsByClassName('hiscore')[0].innerHTML = "High Score: " + checkCurrentScore + ""
@@ -575,69 +721,6 @@
                 }
             }
 
-        }
-    }
-
-    function getCard() {
-        var DeckOfCards = ["ACE♥️", "2♥️", "3♥️", "4♥️", "5♥️", "6♥️", "7♥️", "8♥️", "9♥️", "10♥️", "JACK♥️", "QUEEN♥️", "KING♥️", "ACE♣️", "2♣️", "3♣️", "4♣️", "5♣️", "6♣️", "7♣️", "8♣️", "9♣️", "10♣️", "JACK♣️", "QUEEN♣️", "KING♣️", "ACE♠️", "2♠️", "3♠️", "4♠️", "5♠️", "6♠️", "7♠️", "8♠️", "9♠️", "10♠️", "JACK♠️", "QUEEN♠️", "KING♠️", "ACE♦️", "2♦️", "3♦️", "4♦️", "5♦️", "6♦️", "7♦️", "8♦️", "9♦️", "10♦️", "JACK♦️", "QUEEN♦️", "KING♦️"]
-        var DrawCard = Math.floor(Math.random() * 52);
-        var GetDrawnCardForValue = DeckOfCards[DrawCard]
-        var GetDrawnCardFromDeck = DeckOfCards[DrawCard]
-
-        if (GetDrawnCardForValue == "ACE♥️" || GetDrawnCardForValue == "ACE♣️" || GetDrawnCardForValue == "ACE♠️" || GetDrawnCardForValue == "ACE♦️") {
-            var GetDrawnCardForValue = 1
-        }
-
-        if (GetDrawnCardForValue == "2♥️" || GetDrawnCardForValue == "2♣️" || GetDrawnCardForValue == "2♠️" || GetDrawnCardForValue == "2♦️") {
-            var GetDrawnCardForValue = 2
-        }
-
-        if (GetDrawnCardForValue == "3♥️" || GetDrawnCardForValue == "3♣️" || GetDrawnCardForValue == "3♠️" || GetDrawnCardForValue == "3♦️") {
-            var GetDrawnCardForValue = 3
-        }
-
-        if (GetDrawnCardForValue == "4♥️" || GetDrawnCardForValue == "4♣️" || GetDrawnCardForValue == "4♠️" || GetDrawnCardForValue == "4♦️") {
-            var GetDrawnCardForValue = 4
-        }
-
-        if (GetDrawnCardForValue == "5♥️" || GetDrawnCardForValue == "5♣️" || GetDrawnCardForValue == "5♠️" || GetDrawnCardForValue == "5♦️") {
-            var GetDrawnCardForValue = 5
-        }
-
-        if (GetDrawnCardForValue == "6♥️" || GetDrawnCardForValue == "6♣️" || GetDrawnCardForValue == "6♠️" || GetDrawnCardForValue == "6♦️") {
-            var GetDrawnCardForValue = 6
-        }
-
-        if (GetDrawnCardForValue == "7♥️" || GetDrawnCardForValue == "7♣️" || GetDrawnCardForValue == "7♠️" || GetDrawnCardForValue == "7♦️") {
-            var GetDrawnCardForValue = 7
-        }
-
-        if (GetDrawnCardForValue == "8♥️" || GetDrawnCardForValue == "8♣️" || GetDrawnCardForValue == "8♠️" || GetDrawnCardForValue == "8♦️") {
-            var GetDrawnCardForValue = 8
-        }
-
-        if (GetDrawnCardForValue == "9♥️" || GetDrawnCardForValue == "9♣️" || GetDrawnCardForValue == "9♠️" || GetDrawnCardForValue == "9♦️") {
-            var GetDrawnCardForValue = 9
-        }
-
-        if (GetDrawnCardForValue == "10♥️" || GetDrawnCardForValue == "10♣️" || GetDrawnCardForValue == "10♠️" || GetDrawnCardForValue == "10♦️") {
-            var GetDrawnCardForValue = 10
-        }
-
-        if (GetDrawnCardForValue == "JACK♥️" || GetDrawnCardForValue == "JACK♣️" || GetDrawnCardForValue == "JACK♠️" || GetDrawnCardForValue == "JACK♦️") {
-            var GetDrawnCardForValue = 11
-        }
-
-        if (GetDrawnCardForValue == "QUEEN♥️" || GetDrawnCardForValue == "QUEEN♣️" || GetDrawnCardForValue == "QUEEN♠️" || GetDrawnCardForValue == "QUEEN♦️") {
-            var GetDrawnCardForValue = 12
-        }
-
-        if (GetDrawnCardForValue == "KING♥️" || GetDrawnCardForValue == "KING♣️" || GetDrawnCardForValue == "KING♠️" || GetDrawnCardForValue == "KING♦️") {
-            var GetDrawnCardForValue = 13
-        }
-        return {
-            GetDrawnCardForValue,
-            GetDrawnCardFromDeck
         }
     }
 
