@@ -124,9 +124,24 @@
 <body>
     <button id="button1" class="button button1" onClick="Higher()">Higher</button>
     <button id="button2" class="button button2" onClick="Lower()">Lower</button>
+
 </body>
 
 <script>
+
+    document.addEventListener('keyup', logKey);
+
+    function logKey(e) {
+        var key = `${e.code}`;
+
+        if (key == "KeyH") {
+            Higher()
+        }
+
+        if (key == "KeyL") {
+            Lower()
+        }
+    }
 
     var totalGames = localStorage.getItem("totalPlays")
 
